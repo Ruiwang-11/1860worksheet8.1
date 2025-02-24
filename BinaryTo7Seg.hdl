@@ -1,0 +1,100 @@
+CHIP BinaryTo7Seg {
+    IN in[4];
+    OUT a, b, c, d, e, f, g;
+
+    PARTS:
+    // a = (in1 & !in3) | (!in2 & !in0) | (in3 & in2) | (in0 & in1 & !in2) | (in3 & !in1 & in0);
+    Or(a=in[1], b=!in[3], out=term1);
+    Or(a=!in[2], b=!in[0], out=term2);
+    And(a=term1, b=term2, out=out1);
+    
+    And(a=in[3], b=in[2], out=out2);
+    
+    And(a=in[0], b=in[1], out=term3);
+    And(a=term3, b=!in[2], out=out3);
+    
+    And(a=in[3], b=!in[1], out=term4);
+    And(a=term4, b=in[0], out=out4);
+    
+    Or(a=out1, b=out2, out=out5);
+    Or(a=out3, b=out4, out=a);
+    
+    // b = (!in3 & !in2) | (!in3 & !in1 & !in0) | (in2 & !in1 & in0) | (in3 & in2 & !in0);
+    And(a=!in[3], b=!in[2], out=out6);
+    
+    And(a=!in[3], b=!in[1], out=term5);
+    And(a=term5, b=!in[0], out=out7);
+    
+    And(a=in[2], b=!in[1], out=term6);
+    And(a=term6, b=in[0], out=out8);
+    
+    And(a=in[3], b=in[2], out=term7);
+    And(a=term7, b=!in[0], out=out9);
+    
+    Or(a=out6, b=out7, out=out10);
+    Or(a=out8, b=out9, out=b);
+    
+    // c = (!in3 & !in2) | (!in3 & in1) | (in2 & !in1 & in0);
+    Or(a=!in[3], b=!in[2], out=out11);
+    And(a=!in[3], b=in[1], out=out12);
+    And(a=in[2], b=!in[1], out=term8);
+    And(a=term8, b=in[0], out=out13);
+    Or(a=out11, b=out12, out=out14);
+    Or(a=out14, b=out13, out=c);
+    
+    // d = (!in3 & !in2 & !in0) | (!in3 & in2 & in1 & in0) | (in3 & !in2 & in1) | (in3 & in2 & !in1 & in0);
+    And(a=!in[3], b=!in[2], out=term9);
+    And(a=term9, b=!in[0], out=out15);
+    
+    And(a=!in[3], b=in[2], out=term10);
+    And(a=term10, b=in[1], out=term11);
+    And(a=term11, b=in[0], out=out16);
+    
+    And(a=in[3], b=!in[2], out=term12);
+    And(a=term12, b=in[1], out=out17);
+    
+    And(a=in[3], b=in[2], out=term13);
+    And(a=term13, b=!in[1], out=term14);
+    And(a=term14, b=in[0], out=out18);
+    
+    Or(a=out15, b=out16, out=out19);
+    Or(a=out17, b=out18, out=out20);
+    Or(a=out19, b=out20, out=d);
+    
+    // e = (!in3 & !in2 & !in0) | (!in3 & in1 & in0) | (in3 & in2 & !in1 & !in0);
+    And(a=!in[3], b=!in[2], out=term15);
+    And(a=term15, b=!in[0], out=out21);
+    
+    And(a=!in[3], b=in[1], out=term16);
+    And(a=term16, b=in[0], out=out22);
+    
+    And(a=in[3], b=in[2], out=term17);
+    And(a=term17, b=!in[1], out=term18);
+    And(a=term18, b=!in[0], out=out23);
+    
+    Or(a=out21, b=out22, out=out24);
+    Or(a=out24, b=out23, out=e);
+    
+    // f = (!in3 & !in1) | (!in2 & !in0) | (in3 & in2 & !in1) | (in3 & in2 & !in0);
+    Or(a=!in[3], b=!in[1], out=out25);
+    Or(a=!in[2], b=!in[0], out=out26);
+    
+    And(a=in[3], b=in[2], out=term19);
+    And(a=term19, b=!in[1], out=out27);
+    
+    And(a=in[3], b=in[2], out=term20);
+    And(a=term20, b=!in[0], out=out28);
+    
+    Or(a=out25, b=out26, out=out29);
+    Or(a=out27, b=out28, out=out30);
+    Or(a=out29, b=out30, out=f);
+    
+    // g = (!in3 & !in2) | (in3 & in2 & !in1 & !in0);
+    Or(a=!in[3], b=!in[2], out=out31);
+    
+    And(a=in[3], b=in[2], out=term21);
+    And(a=term21, b=!in[1], out=term22);
+    And(a=term22, b=!in[0], out=out32);
+    
+    Or(a=out31, b=out32, out=g);
+}
